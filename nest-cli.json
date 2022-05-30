@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/backend/src",
+  "monorepo": true,
+  "root": "apps/backend",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/backend/tsconfig.app.json"
+  },
+  "projects": {
+    "backend": {
+      "type": "application",
+      "root": "apps/backend",
+      "entryFile": "main",
+      "sourceRoot": "apps/backend/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/backend/tsconfig.app.json"
+      }
+    },
+    "docker": {
+      "type": "application",
+      "root": "apps/docker",
+      "entryFile": "main",
+      "sourceRoot": "apps/docker/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/docker/tsconfig.app.json"
+      }
+    },
+    "db-management": {
+      "type": "application",
+      "root": "apps/db-management",
+      "entryFile": "main",
+      "sourceRoot": "apps/db-management/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/db-management/tsconfig.app.json"
+      }
+    }
+  }
+}

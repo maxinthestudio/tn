@@ -1,0 +1,65 @@
+version: "3.7"
+
+services:
+  mysql-truenorth:
+    container_name: mysql-truenorth
+    image: mysql:5.6
+    platform: linux/x86_64
+    restart: "no"
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - my-db-truenorth:/var/lib/mysql
+    networks:
+      - truenorth
+
+  backend-truenorth:
+    image: node:16.13.1
+    user: node
+    command: npm run start
+    container_name: backend-truenorth
+    working_dir: $BACKEND_FOLDER
+    volumes:
+      - "../../..:$BACKEND_FOLDER:cached"
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - mysql-truenorth
+    networks:
+      - truenorth
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend-truenorth:
+    image: node:16.13.1
+    user: node
+    command: npm run start
+    container_name: frontend-truenorth
+    working_dir: $FRONTEND_FOLDER
+    volumes:
+      - "../../frontend:$FRONTEND_FOLDER:cached"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-truenorth
+    networks:
+      - truenorth
+    environment:
+      - "REACT_APP_APP_URL=$APP_URL"
+      - "REACT_APP_APP_PORT=$APP_PORT"
+      - "REACT_APP_TIMEOUT=10000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  my-db-truenorth:
+
+
+networks:
+  truenorth:
+    name: truenorth-network

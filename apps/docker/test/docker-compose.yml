@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+  mysql-test-truenorth:
+    container_name: mysql-test-truenorth
+    image: mysql:5.6
+    platform: linux/x86_64
+    restart: "no"
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - my-db-test-truenorth:/var/lib/mysql
+    networks:
+      - test-truenorth
+
+volumes:
+  my-db-test-truenorth:
+
+
+networks:
+  test-truenorth:
+    name: test-truenorth-network
